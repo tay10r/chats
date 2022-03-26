@@ -2,37 +2,38 @@
 
 #include <QApplication>
 #include <QLocale>
+#include <QProcess>
 #include <QTranslator>
+
+#ifdef Q_OS_WIN
+#include <Windows.h>
+#endif
 
 namespace {
 
 const char* g_styleSheet = R"(
-QMainWindow {
-  background: #114B5F
+QWidget {
+  border-width: 0px;
 }
 
-QFrame#TopWidget {
-  background: #156079
+QWidget#ChatView {
+  color: black;
+  background-color: white;
 }
 
-QFrame#CentralWidget {
+QTextEdit {
+  color: black;
+  background-color: white;
+  border-radius: 5px;
+  border-width: 1px;
+  padding: 5px;
 }
 
-QFrame#BodyWidget {
-
-}
-
-QFrame#LeftPanel {
-}
-
-QLabel {
-  border: 1px;
-  border-color: #186E8B;
-  color: white
-}
-
-QFrame#ChatWidget {
-  background: white
+QWidget#ChatView QLabel {
+  background-color: white;
+  border-radius: 5px;
+  border-width: 1px;
+  padding: 5px;
 }
 )";
 
@@ -43,7 +44,9 @@ main(int argc, char* argv[])
 {
   QApplication a(argc, argv);
 
-  a.setApplicationName("Chats");
+  a.setApplicationName(QObject::tr("Chats"));
+
+  a.setStyleSheet(g_styleSheet);
 
   QTranslator translator;
 
@@ -57,11 +60,27 @@ main(int argc, char* argv[])
     }
   }
 
-  MainWindow w;
-
-  a.setStyleSheet(g_styleSheet);
+  MainWindow w(".");
 
   w.showMaximized();
+
+#ifdef Q_OS_WIN
+  char acUserName[MAX_USERNAME];
+
+  DWORD nUserName = sizeof(acUserName);
+
+  if (GetUserName(acUserName, &nUserName))
+    w.setUserName(acUserName);
+#elif defined(Q_OS_UNIX)
+  QProcess process;
+  QObject::connect(&process,
+                   static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+                   [&process, &w](int exitCode, QProcess::ExitStatus exitStatus) {
+                     const QString userName(process.readAllStandardOutput());
+                     w.setUserName(userName);
+                   });
+  process.start("whoami", QStringList() << "whoami");
+#endif
 
   return a.exec();
 }

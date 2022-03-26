@@ -20,24 +20,25 @@ set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
         mainwindow.h
-        centralwidget.h
-        centralwidget.cpp
-        topwidget.h
-        topwidget.cpp
-        bodywidget.h
-        bodywidget.cpp
-        leftwidget.h
-        leftwidget.cpp
         chatwidget.h
         chatwidget.cpp
         chatview.h
         chatview.cpp
         chatinput.h
         chatinput.cpp
-        message.h
-        message.cpp
+        object.h
+        channelobjects.h
+        channelobjects.cpp
+        messageobject.h
+        messageobject.cpp
         messagewidget.h
         messagewidget.cpp
+        objectparser.h
+        objectparser.cpp
+        storagemodel.h
+        storagemodel.cpp
+        viewmodel.h
+        viewmodel.cpp
         ${TS_FILES}
 )
 

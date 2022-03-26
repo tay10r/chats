@@ -1,8 +1,10 @@
 #pragma once
 
-#include <QTextEdit>
+#include <QFrame>
 
-class Message;
+#include <QPushButton>
+#include <QTextEdit>
+#include <QVBoxLayout>
 
 class ChatInput final : public QTextEdit
 {
@@ -10,14 +12,11 @@ class ChatInput final : public QTextEdit
 public:
   explicit ChatInput(QWidget* parent);
 
-  void setUser(const QString& user);
-
 signals:
-  void publish(const Message&);
+  void publish(const QString& message);
 
 private:
+  auto getText() const -> QString;
+
   void keyPressEvent(QKeyEvent* event) override;
-
-private:
-  QString m_user;
 };

@@ -4,14 +4,27 @@
 
 #include <QVBoxLayout>
 
+#include <vector>
+
+#include "viewmodel.h"
+
+class MessageWidget;
+
 class ChatView final : public QScrollArea
 {
   Q_OBJECT
 public:
   explicit ChatView(QWidget* parent);
 
-  void scanDirectory(const QString& path);
+  void update(const ViewModel::Channel&);
 
 private:
-  QVBoxLayout m_layout{ this };
+  void scrollToBottom(int scrollMin, int scrollMax);
+
+private:
+  QFrame m_target{ this };
+
+  QVBoxLayout m_layout{ &m_target };
+
+  std::vector<MessageWidget*> m_messageWidgets;
 };

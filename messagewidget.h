@@ -1,11 +1,14 @@
 #pragma once
 
-#include <QFrame>
+#include <QLabel>
 
-#include <QHBoxLayout>
+#include "object.h"
+#include "viewmodel.h"
 
-class MessageWidget final : public QFrame
+class MessageObject;
+
+class MessageWidget final : public QLabel
 {
 public:
-  explicit MessageWidget(QWidget* parent);
+  explicit MessageWidget(const ViewModel::Message&, const QDateTime& dateTime, QWidget* parent);
 };
